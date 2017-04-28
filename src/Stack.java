@@ -11,7 +11,7 @@ public class Stack<T> {
 	}
 	
 	public void push(T item) {
-		front = new Node<T>(item, front);
+		front = new Node<T>(item);
 		size++;
 	}
 	

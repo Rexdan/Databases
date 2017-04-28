@@ -1,4 +1,4 @@
-public class FDList<FD>
+public class FDList
 {
 	Node<FD> head;
 	Node<FD> tail;
@@ -13,7 +13,7 @@ public class FDList<FD>
 	/*Inserts a new functional dependency into the list.*/
 	public void insert(FD fd) {
 		//System.out.println(fd);
-		Node<FD> node = new Node<FD>(fd, head);
+		Node<FD> node = new Node<FD>(fd);
 		if(size == 0)
 		{
 			head = node;
@@ -22,10 +22,10 @@ public class FDList<FD>
 		}
 		else
 		{
-			Node<FD> temp = head;
-			node.next = temp;
-			head = node;
-			tail.next = head;
+			Node<FD> n = new Node<FD>(fd);
+            tail.next =n;
+            tail=n;
+            tail.next = head;
 		}
 		size++;
 	}
@@ -33,16 +33,30 @@ public class FDList<FD>
 	/*Returns the next functional dependency in the list.*/
 	public Node<FD> getNext()
 	{
-		return head.next;
+		Node<FD> toReturn = head.next;
+		head = head.next;
+		return toReturn;
 	}
 	
+	/* Resets the CLL so that our tail is now set to the head.
+	 * Calling getNext will result in choosing the first element.
+	 */
 	public void reset()
 	{
-		
+		head = tail;
+		System.out.println(head);
 	}
 	
-	public int size() {
-		return size;
-	}
-
+	public void traverse(){
+        Node<FD> temp = head;
+        if(size<=0){
+            System.out.print("List is empty");
+        }else{
+            do {
+                System.out.println(temp.data);
+                temp = temp.next;
+            }
+            while(temp!=head);
+        }
+    }
 }

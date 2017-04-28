@@ -3,9 +3,9 @@ public class Node<T> {
 	T data;
 	Node<T> next;
 	
-	public Node(T data, Node<T> next) {
+	public Node(T data) {
 		this.data = data;
-		this.next = next;
+		this.next = null;
 	}
 	
 	public String toString() {

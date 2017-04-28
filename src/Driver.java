@@ -29,26 +29,27 @@ public class Driver {
 		 */
 		while((line = br.readLine()) != null)
 		{
-			//System.out.println(line);
 			Relation lhs, rhs;
 			int lLen, rLen;
 			lLen = line.indexOf('-') - 1;
 			lhs = new Relation(line.substring(0, lLen));
 			rLen = line.indexOf('>') + 2;
 			rhs = new Relation(line.substring(rLen, line.length()));
-			//System.out.println(lhs);
-			//System.out.println(rhs);
 			FD temp = new FD(lhs,rhs);
 			fdl.insert(temp);
-			//System.out.println(lhs);
-			//System.out.println(rhs);
 			
 		}
-		//System.out.println(totalAttr);
-		System.out.println(fdl.size);
-		System.out.println(fdl.getNext());
-		fdl.reset();
-		System.out.println(fdl.getNext());
+
+		Node<FD> ptr = fdl.head;
+		int size = fdl.size;
+		int count = 0;
+		while(count < size)
+		{
+			System.out.println(ptr);
+			ptr = fdl.getNext();
+			count++;
+		}
+		
 		if(br != null) br.close();
 		if(fr != null) fr.close();
 	}
