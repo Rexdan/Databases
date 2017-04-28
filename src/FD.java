@@ -8,5 +8,10 @@ public class FD
 		this.lhs = lhs;
 		this.rhs = rhs;
 	}
-
+	
+	@Override
+	public String toString()
+	{
+		return lhs + "-> " + rhs;
+	}
 }

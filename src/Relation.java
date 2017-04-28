@@ -6,17 +6,35 @@ public class Relation
 	 * array A of integers with values of 0 or 1. 
 	 * If A[i]=1 means that the attribute with 
 	 * ASCII i is in the relation.*/
-	int [] arr;
+	int [] attr;
 	
-	public Relation()
+	public Relation(String input)
 	{
-		
+		this.attr = new int[26];
+		for(int i = 0; i < input.length(); i++)
+		{
+			char c = input.charAt(i);
+			if(Character.isLetter(c))
+			{
+				int index = c - 65;
+				attr[index] = 1;
+			}
+		}
 	}
-
-	public Relation(int size)
+	
+	@Override
+	public String toString()
 	{
-		/*Allocating dynamic memory for the 'relation'*/
-		this.arr = new int[size];
+		String toReturn = new String();
+		for(int i = 0; i < attr.length; i++)
+		{
+			if(attr[i] == 1)
+			{
+				char c = (char)(i + 65);
+				toReturn += c;
+				toReturn += ' ';
+			}
+		}
+		return toReturn;
 	}
-
 }
