@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Driver {
 
-	public static final String fd = "src/test.txt";
+	public static final String fd = "test.txt";
 	
 	public static Relation diffR(Relation r1, Relation r2)
 	{
@@ -47,16 +47,22 @@ public class Driver {
 	
 	public static boolean bcnfViolation(Relation r, FD fd)
 	{
+		/* If r contains everything that is in the lhs of f,
+		 * then this passes the first condition.*/
+		System.out.println(r);
+		System.out.println(fd);
 		
-		if(!(r.toString().contains(fd.lhs.toString())))
+		if(!(r.contains(fd.lhs)))
 		{
 			System.out.println("BCNF violation. Violates first check.");
 			return true;
 		}
 		
 		Relation temp = unionR(fd.lhs, fd.rhs);
-		
-		if(!temp.equals(r))
+		/* If r contains the union of everything in f,
+		 * then this passes the second check.
+		 */
+		if(!(r.contains(temp)))
 		{
 			System.out.println("BCNF violation. Violates second check.");
 			return true;
@@ -67,7 +73,7 @@ public class Driver {
 	
 	public static DB bcnf(Relation r, FDList fdl)
 	{
-		DB db = null;
+		DB db = new DB();
 		Stack<Relation> s = new Stack<Relation>();
 		s.push(r);
 		
@@ -82,12 +88,10 @@ public class Driver {
 			{
 				if(bcnfViolation(a, fd))
 					violation = true;
+				if(fd.equals(fdl.tail.data)) break;
 			}
-			
 			if(!violation)
-			{
 				db.insert(a);
-			}
 			else
 			{
 				Relation union = unionR(fd.lhs, fd.rhs);
@@ -131,29 +135,6 @@ public class Driver {
 		}
 		
 		DB db = bcnf(totalAttr, fdl);
-
-		/*Node<FD> ptr = fdl.head;
-		int size = fdl.size-2;
-		int count = 0;
-		while(count < size)
-		{
-			System.out.println(ptr);
-			ptr = fdl.getNext();
-			count++;
-		}
-		
-		System.out.println(fdl.head);
-		fdl.reset();
-		ptr = fdl.getNext();
-		System.out.println("Resetting...");
-		size = fdl.size;
-		count = 0;
-		while(count < size)
-		{
-			System.out.println(ptr);
-			ptr = fdl.getNext();
-			count++;
-		}*/
 		
 		if(br != null) br.close();
 		if(fr != null) fr.close();

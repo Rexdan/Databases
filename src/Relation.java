@@ -27,6 +27,35 @@ public class Relation
 		this.attr = attr;
 	}
 	
+	public boolean contains(Object o)
+	{
+		Relation r;
+		if(o instanceof Relation)
+		{
+			r = (Relation)o;
+		}
+		else return false;
+		
+		int [] r1 = this.attr;
+		int [] r2 = r.attr;
+		int countr1 = 0;
+		int countBoth = 0;
+		
+		for(int i = 0; i < r2.length; i++)
+		{
+			if(r2[i] == 1) countr1++;
+		}
+		
+		for(int i = 0; i < r1.length; i++)
+		{
+			if(r1[i] == r2[i]) countBoth++;
+		}
+		
+		if(countr1 > countBoth)	
+			return false;
+		return true;
+	}
+	
 	@Override
 	public boolean equals(Object o)
 	{
