@@ -12,7 +12,6 @@ public class FDList
 	
 	/*Inserts a new functional dependency into the list.*/
 	public void insert(FD fd) {
-		//System.out.println(fd);
 		Node<FD> node = new Node<FD>(fd);
 		if(size == 0)
 		{
@@ -44,7 +43,7 @@ public class FDList
 	public void reset()
 	{
 		head = tail;
-		System.out.println(head);
+		//System.out.println(head);
 	}
 	
 	public void traverse(){

@@ -22,6 +22,27 @@ public class Relation
 		}
 	}
 	
+	public Relation(int [] attr)
+	{
+		this.attr = attr;
+	}
+	
+	@Override
+	public boolean equals(Object o)
+	{
+		Relation r;
+		if(o instanceof Relation)
+		{
+			r = (Relation)o;
+		}
+		else return false;
+		String s1, s2;
+		s1 = this.toString();
+		s2 = r.toString();
+		if(s1.equals(s2)) return true;
+		return false;
+	}
+	
 	@Override
 	public String toString()
 	{
@@ -35,6 +56,7 @@ public class Relation
 				toReturn += ' ';
 			}
 		}
+		toReturn = toReturn.substring(0, toReturn.length()-1);
 		return toReturn;
 	}
 }
