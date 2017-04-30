@@ -22,9 +22,26 @@ public class Relation
 		}
 	}
 	
+	public Relation()
+	{
+		attr = new int[26];
+	}
+	
 	public Relation(int [] attr)
 	{
 		this.attr = attr;
+	}
+	/*Only being used for one particular method in the driver.*/
+	public void insert(Relation r)
+	{
+		int arr[] = r.attr;
+		for(int i = 0; i < attr.length; i++)
+		{
+			if(arr[i] == 1 && attr[i] == 0)
+			{
+				attr[i] = 1;
+			}
+		}
 	}
 	
 	public boolean contains(Object o)
