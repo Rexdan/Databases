@@ -88,7 +88,7 @@ public class Driver {
 		/* If everything in f is not a super set of r,
 		 * then this passes the second check.
 		 */
-		if(!(temp.contains(r)))
+		if((temp.contains(r)))
 		{
 			System.out.println("BCNF violation. Violates second check.");
 			return true;
@@ -104,23 +104,22 @@ public class Driver {
 		s.push(r);
 		int count = 0;
 		
-		
 		while(!s.isEmpty())
 		{
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
-			if(count == 3) break;
+			//if(count == 3) break;
 			boolean violation = false;
 			fdl.reset();
 			FD fd;
 			while((fd = fdl.getNext().data) != null && !violation)
 			{
-				closure(fd, fdl, a);
+				//closure(fd, fdl, a);
 				if(bcnfViolation(a, fd))
 				{
 					violation = true;
 				}
-				count ++;
+				//count ++;
 				if(fd.equals(fdl.tail.data)) break;
 			}
 			if(!violation)
