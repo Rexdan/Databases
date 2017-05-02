@@ -5,31 +5,40 @@ import java.util.Scanner;
 
 public class Driver {
 	
-	public static Relation closure(FD fd, FDList fdl, Relation totalAttr)
+	public static Relation closure(FD fd, FDList fdl, Relation a)
 	{
 		//System.out.println("The first element in fdl; first check: " + fdl.head.data);
 		Node<FD> first = fdl.head;
 		FD firstFD = fd;
 		System.out.println("In closure.");
-		FD ptr = fd;
+		FD ptr1 = fd;
+		FD ptr2;
 		
 		Relation closureR = new Relation();
+		Relation r1 = ptr1.lhs;
+		Relation r2 = ptr1.rhs;
+		closureR.insert(r1);
+		closureR.insert(r2);
+		ptr2 = ptr1;
+		ptr1 = fdl.getNext().data;
+		System.out.println("Aftering adding current closure: " + closureR);
 		
-		while(ptr != null)
+		while(ptr1 != null)
 		{
-			System.out.println("Current FD: " + ptr);
-			Relation r1 = ptr.lhs;
-			Relation r2 = ptr.rhs;
-			closureR.insert(r1);
-			FD chk = ptr;
-			while(chk != null)
-			{
-				
-			}
-			ptr = fdl.getNext().data;
-			if(ptr.equals(firstFD)) break;
+			System.out.println("Current FD: " + ptr1);
+			
+			if(ptr2.rhs.contains(ptr1.lhs)) closureR.insert(ptr1.lhs);
+			
+			System.out.println("Current closure: " + closureR);
+			
+			ptr1 = fdl.getNext().data;
+			
+			if(ptr1.equals(firstFD)) break;
+			
 		}
 		fdl.head = first;
+		//System.out.println(fdl.head.data);
+		System.exit(0);
 		return null;
 	}
 	
@@ -71,28 +80,24 @@ public class Driver {
 		return r;
 	}
 	
-	public static boolean bcnfViolation(Relation r, FD fd)
+	public static boolean bcnfViolation(Relation r, FD fd, FDList fdl)
 	{
+		
+		Relation a = closure(fd, fdl, r);
+		
 		/* If r contains everything that is in the lhs of f,
 		 * then this passes the first condition.*/
 		System.out.println("BCNF Check - Relation: " + r);
 		System.out.println("BCNF Check - Funcitonal Dependency: " + fd);
 		
-		if(!(r.contains(fd.lhs)))
+		Relation temp = unionR(fd.lhs, fd.rhs);
+		
+		if(!(r.contains(fd.lhs)) && !(temp.contains(r)))
 		{
 			System.out.println("BCNF violation. Violates first check.");
 			return true;
 		}
 		
-		Relation temp = unionR(fd.lhs, fd.rhs);
-		/* If everything in f is not a super set of r,
-		 * then this passes the second check.
-		 */
-		if(!(temp.contains(r)))
-		{
-			System.out.println("BCNF violation. Violates second check.");
-			return true;
-		}
 		System.out.println("Returning false.");
 		return false;
 	}
@@ -115,8 +120,9 @@ public class Driver {
 			FD fd;
 			while((fd = fdl.getNext().data) != null && !violation)
 			{
-				closure(fd, fdl, a);
-				if(bcnfViolation(a, fd))
+				System.out.println("Current functional dependency: " + fd);
+				
+				if(bcnfViolation(a, fd, fdl))
 				{
 					violation = true;
 				}
