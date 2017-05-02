@@ -44,6 +44,64 @@ public class Relation
 		}
 	}
 	
+	public Relation diff(Relation r)
+	{
+		int arr1[], arr2[];
+		arr1 = this.attr;
+		arr2 = r.attr;
+		
+		int arrF[] = new int[26];
+		
+		for(int i = 0; i < arrF.length; i++)
+		{
+			if(arr1[i] == 1 && arr2[i] == 0)
+			{
+				arrF[i] = 1;
+			}
+		}
+		Relation toReturn = new Relation(arrF);
+		return toReturn;
+	}
+	
+	public Relation union(Relation r)
+	{
+		int arr1[], arr2[];
+		arr1 = this.attr;
+		arr2 = r.attr;
+		
+		int arrF[] = new int[26];
+		
+		for(int i = 0; i < arrF.length; i++)
+		{
+			if(arr1[i] == 1 || arr2[i] == 1)
+			{
+				arrF[i] = 1;
+			}
+		}
+		Relation toReturn = new Relation(arrF);
+		return toReturn;
+	}
+	
+	public Relation intersect(Object o)
+	{
+		Relation r;
+		Relation toReturn = new Relation();
+		if(o instanceof Relation)
+		{
+			r = (Relation) o;
+		}else return null;
+		
+		int [] r1 = this.attr;
+		int [] r2 = r.attr;
+		
+		for(int i = 0; i < r1.length; i++)
+		{
+			if(r1[i] == r2[i]) toReturn.attr[i] = r1[i];
+		}
+		//System.out.println("INTERSECT: " + toReturn);
+		return toReturn;
+	}
+	
 	public boolean contains(Object o)
 	{
 		Relation r;

@@ -5,12 +5,12 @@ import java.util.Scanner;
 
 public class Driver {
 	
-	public static Relation closure(FD fd, FDList fdl, Relation a)
+	public static Relation closure(FD fd, FDList fdl)
 	{
 		//System.out.println("The first element in fdl; first check: " + fdl.head.data);
 		Node<FD> first = fdl.head;
 		FD firstFD = fd;
-		System.out.println("************************ENTERING CLOSURE************************");
+		//System.out.println("************************ENTERING CLOSURE************************");
 		FD ptr1 = fd;
 		FD ptr2;
 		
@@ -23,16 +23,17 @@ public class Driver {
 		ptr2 = ptr1;
 		//System.out.println("Previous FD: " + ptr2);
 		ptr1 = fdl.getNext().data;
-		System.out.println("Current closure: " + closureR);
+		//System.out.println("Current closure: " + closureR);
 		
 		while(ptr1 != null)
 		{
 			//System.out.println("Current FD: " + ptr1);
 			//System.out.println("Previous FD: " + ptr2);
 			
-			if(ptr2.rhs.contains(ptr1.lhs)) closureR.insert(ptr1.rhs);
+			/*Change to finding the intersect and then change contains to find subset.*/
+			if(ptr2.rhs.intersect(ptr1.lhs) != null) closureR.insert(ptr1.rhs);
 			
-			System.out.println("Current closure: " + closureR);
+			//System.out.println("Current closure: " + closureR);
 			ptr2 = ptr1;
 			ptr1 = fdl.getNext().data;
 			
@@ -41,11 +42,11 @@ public class Driver {
 		}
 		fdl.head = first;
 		//System.out.println(fdl.head.data);
-		System.out.println("************************EXITING CLOSURE************************");
+		//System.out.println("************************EXITING CLOSURE************************");
 		return closureR;
 	}
 	
-	public static Relation diffR(Relation r1, Relation r2)
+	/*public static Relation diffR(Relation r1, Relation r2)
 	{
 		int arr1[], arr2[];
 		arr1 = r1.attr;
@@ -62,9 +63,9 @@ public class Driver {
 		}
 		Relation r = new Relation(arrF);
 		return r;
-	}
+	}*/
 	
-	public static Relation unionR(Relation r1, Relation r2)
+	/*public static Relation unionR(Relation r1, Relation r2)
 	{
 		int arr1[], arr2[];
 		arr1 = r1.attr;
@@ -81,40 +82,27 @@ public class Driver {
 		}
 		Relation r = new Relation(arrF);
 		return r;
-	}
+	}*/
 	
 	public static boolean bcnfViolation(Relation r, FD fd, FDList fdl)
 	{
-		Relation a = closure(fd, fdl, r);
-		
-		/* If r contains everything that is in the lhs of f,
-		 * then this passes the first condition.*/
+		Relation a = closure(fd, fdl);
 		System.out.println("BCNF Check - Relation: " + r);
 		System.out.println("BCNF Check - Closure: " + a);
 		System.out.println("BCNF Check - Funcitonal Dependency: " + fd);
 		
-		if(r.equals(a)) System.out.println("No BCNF violation.");
-		else System.out.println("BCNF violation.");
-		
-		//Relation temp = unionR(fd.lhs, fd.rhs);
-		
-		/*if(!(r.contains(fd.lhs)) && (temp.contains(r)))
+		Relation intersect = a.intersect(r);
+		/*If our closure contains everything from the relation that was fed into the method.*/
+		if(intersect.equals(r))
 		{
-			System.out.println("BCNF violation. Violates first check.");
-			return true;
-		}*/
-		
-		Relation temp = unionR(fd.lhs, fd.rhs);
-		/* If everything in f is not a super set of r,
-		 * then this passes the second check.
-		 */
-		if((temp.contains(r)))
+			System.out.println("No BCNF violation.");
+			return false;
+		}
+		else 
 		{
-			System.out.println("BCNF violation. Violates second check.");
+			System.out.println("BCNF violation.");
 			return true;
 		}
-		System.out.println("Returning false.");
-		return false;
 	}
 	
 	public static DB bcnf(Relation r, FDList fdl)
@@ -128,10 +116,11 @@ public class Driver {
 		{
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
-			//if(count == 3) break;
+			if(count == 6) break;
 			boolean violation = false;
 			fdl.reset();
 			FD fd;
+			FD fdv = null; //Needed because while loop will give next FD after break.
 			while((fd = fdl.getNext().data) != null && !violation)
 			{
 				System.out.println("Current functional dependency: " + fd);
@@ -139,23 +128,23 @@ public class Driver {
 				if(bcnfViolation(a, fd, fdl))
 				{
 					violation = true;
+					fdv = fd;
 				}
-				//count ++;
+				count ++;
 				if(fd.equals(fdl.tail.data)) break;
 			}
 			if(!violation)
 				db.insert(a);
 			else
 			{
-				Relation union = unionR(fd.lhs, fd.rhs);
-				System.out.println(fd);
+				Relation union = fdv.lhs.union(fdv.rhs);
+				System.out.println("VIOLATING FUNCTIONAL DEPENDENCY: " + fdv);
 				s.push(union);
 				System.out.println("UNION: " + union);
-				Relation diff = diffR(a, fd.rhs);
+				Relation diff = a.diff(fdv.rhs);
 				s.push(diff);
 				System.out.println("DIFFERENCE: " + diff);
 			}
-			if(count == 2) break;
 		}
 		return db;
 	}
