@@ -10,7 +10,7 @@ public class Driver {
 		//System.out.println("The first element in fdl; first check: " + fdl.head.data);
 		Node<FD> first = fdl.head;
 		FD firstFD = fd;
-		System.out.println("In closure.");
+		System.out.println("************************ENTERING CLOSURE************************");
 		FD ptr1 = fd;
 		FD ptr2;
 		
@@ -19,18 +19,21 @@ public class Driver {
 		Relation r2 = ptr1.rhs;
 		closureR.insert(r1);
 		closureR.insert(r2);
+		//System.out.println("Current FD: " + ptr1);
 		ptr2 = ptr1;
+		//System.out.println("Previous FD: " + ptr2);
 		ptr1 = fdl.getNext().data;
-		System.out.println("Aftering adding current closure: " + closureR);
+		System.out.println("Current closure: " + closureR);
 		
 		while(ptr1 != null)
 		{
-			System.out.println("Current FD: " + ptr1);
+			//System.out.println("Current FD: " + ptr1);
+			//System.out.println("Previous FD: " + ptr2);
 			
-			if(ptr2.rhs.contains(ptr1.lhs)) closureR.insert(ptr1.lhs);
+			if(ptr2.rhs.contains(ptr1.lhs)) closureR.insert(ptr1.rhs);
 			
 			System.out.println("Current closure: " + closureR);
-			
+			ptr2 = ptr1;
 			ptr1 = fdl.getNext().data;
 			
 			if(ptr1.equals(firstFD)) break;
@@ -38,8 +41,8 @@ public class Driver {
 		}
 		fdl.head = first;
 		//System.out.println(fdl.head.data);
-		System.exit(0);
-		return null;
+		System.out.println("************************EXITING CLOSURE************************");
+		return closureR;
 	}
 	
 	public static Relation diffR(Relation r1, Relation r2)
@@ -82,21 +85,24 @@ public class Driver {
 	
 	public static boolean bcnfViolation(Relation r, FD fd, FDList fdl)
 	{
-		
 		Relation a = closure(fd, fdl, r);
 		
 		/* If r contains everything that is in the lhs of f,
 		 * then this passes the first condition.*/
 		System.out.println("BCNF Check - Relation: " + r);
+		System.out.println("BCNF Check - Closure: " + a);
 		System.out.println("BCNF Check - Funcitonal Dependency: " + fd);
 		
-		Relation temp = unionR(fd.lhs, fd.rhs);
+		if(r.equals(a)) System.out.println("No BCNF violation.");
+		else System.out.println("BCNF violation.");
 		
-		if(!(r.contains(fd.lhs)) && !(temp.contains(r)))
+		//Relation temp = unionR(fd.lhs, fd.rhs);
+		
+		/*if(!(r.contains(fd.lhs)) && (temp.contains(r)))
 		{
 			System.out.println("BCNF violation. Violates first check.");
 			return true;
-		}
+		}*/
 		
 		System.out.println("Returning false.");
 		return false;
@@ -108,7 +114,6 @@ public class Driver {
 		Stack<Relation> s = new Stack<Relation>();
 		s.push(r);
 		int count = 0;
-		
 		
 		while(!s.isEmpty())
 		{
@@ -141,6 +146,7 @@ public class Driver {
 				s.push(diff);
 				System.out.println("DIFFERENCE: " + diff);
 			}
+			if(count == 2) break;
 		}
 		return db;
 	}
