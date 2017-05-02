@@ -104,6 +104,15 @@ public class Driver {
 			return true;
 		}*/
 		
+		Relation temp = unionR(fd.lhs, fd.rhs);
+		/* If everything in f is not a super set of r,
+		 * then this passes the second check.
+		 */
+		if((temp.contains(r)))
+		{
+			System.out.println("BCNF violation. Violates second check.");
+			return true;
+		}
 		System.out.println("Returning false.");
 		return false;
 	}
@@ -119,19 +128,19 @@ public class Driver {
 		{
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
-			if(count == 3) break;
+			//if(count == 3) break;
 			boolean violation = false;
 			fdl.reset();
 			FD fd;
 			while((fd = fdl.getNext().data) != null && !violation)
 			{
 				System.out.println("Current functional dependency: " + fd);
-				
+
 				if(bcnfViolation(a, fd, fdl))
 				{
 					violation = true;
 				}
-				count ++;
+				//count ++;
 				if(fd.equals(fdl.tail.data)) break;
 			}
 			if(!violation)
