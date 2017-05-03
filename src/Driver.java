@@ -114,6 +114,7 @@ public class Driver {
 		
 		while(!s.isEmpty())
 		{
+			System.out.println("**************************ENTERING DECOMPOSITION**************************");
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
 			if(count == 6) break;
@@ -137,14 +138,24 @@ public class Driver {
 				db.insert(a);
 			else
 			{
+				/*
+				 * This isn't that kind of union and difference...
+				 * Should be something like this:
+				 * 		Push the attributes that come after the violating fd.
+				 * 		Then push the leftover fd's as attributes.
+				 * 
+				 * We are dealing with not ONE fd here, but rather the fd's that follow
+				 * and include the current violating fd...
+				 */
 				Relation union = fdv.lhs.union(fdv.rhs);
-				System.out.println("VIOLATING FUNCTIONAL DEPENDENCY: " + fdv);
+				System.out.println("VIOLATING FUNCTIONAL DEPENDENCY: " + fdv);//May have to be the CLOSURE of the fdv...
 				s.push(union);
 				System.out.println("UNION: " + union);
 				Relation diff = a.diff(fdv.rhs);
 				s.push(diff);
 				System.out.println("DIFFERENCE: " + diff);
 			}
+			System.out.println("**************************ENTERING DECOMPOSITION**************************");
 		}
 		return db;
 	}

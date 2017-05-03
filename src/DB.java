@@ -13,21 +13,26 @@ public class DB
 	/*Inserts a new functional dependency into the list.*/
 	public void insert(Relation Relation) {
 		//System.out.println(Relation);
-		Node<Relation> node = new Node<Relation>(Relation);
-		if(size == 0)
+		//System.out.println("DB's SIZE: " + size);
+		if(!has(Relation))
 		{
-			head = node;
-			tail = node;
-			node.next = head;
+			//System.out.println("SAFELY ADDED RELATION");
+			Node<Relation> node = new Node<Relation>(Relation);
+			if(size == 0)
+			{
+				head = node;
+				tail = node;
+				node.next = head;
+			}
+			else
+			{
+				Node<Relation> n = new Node<Relation>(Relation);
+	            tail.next =n;
+	            tail=n;
+	            tail.next = head;
+			}
+			size++;
 		}
-		else
-		{
-			Node<Relation> n = new Node<Relation>(Relation);
-            tail.next =n;
-            tail=n;
-            tail.next = head;
-		}
-		size++;
 	}
 	
 	/*Returns the next functional dependency in the list.*/
@@ -45,6 +50,30 @@ public class DB
 	{
 		head = tail;
 		System.out.println(head);
+	}
+	
+	public boolean has(Relation r1)
+	{
+		Node<Relation> temp = head;
+		Relation r2;
+        if(size<=0){
+            return false;
+        }else{
+            do {
+                //System.out.println("Checking...");
+                //System.out.println(r1);
+                r2 = temp.data;
+                //System.out.println(r2);
+                if(r1.equals(r2))
+                {
+                	//System.out.println("Found a relation that's already in the DB");
+                	return true;
+                }
+                temp = temp.next;
+            }
+            while(temp!=head);
+        }
+		return false;
 	}
 	
 	public void traverse(){
