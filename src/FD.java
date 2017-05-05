@@ -2,6 +2,12 @@ public class FD
 {
 	Relation lhs;
 	Relation rhs;
+	
+	public FD()
+	{
+		this.lhs = null;
+		this.rhs = null;
+	}
 
 	public FD(Relation lhs, Relation rhs)
 	{

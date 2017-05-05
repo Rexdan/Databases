@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Driver {
+	static FDList origList;
 	
 	public static Relation closure(FD fd, FDList fdl)
 	{
@@ -13,8 +14,9 @@ public class Driver {
 		//System.out.println("************************ENTERING CLOSURE************************");
 		FD ptr1 = fd;
 		FD ptr2;
-		
 		Relation closureR = new Relation();
+		
+		closureR = new Relation();
 		Relation r1 = ptr1.lhs;
 		Relation r2 = ptr1.rhs;
 		closureR.insert(r1);
@@ -31,8 +33,10 @@ public class Driver {
 			//System.out.println("Previous FD: " + ptr2);
 			
 			/*Change to finding the intersect and then change contains to find subset.*/
-			if(ptr2.rhs.intersect(ptr1.lhs) != null) closureR.insert(ptr1.rhs);
-			
+			if(ptr2.rhs.intersect(ptr1.lhs) != null)
+			{
+				closureR.insert(ptr1.rhs);
+			}
 			//System.out.println("Current closure: " + closureR);
 			ptr2 = ptr1;
 			ptr1 = fdl.getNext().data;
@@ -43,50 +47,13 @@ public class Driver {
 		fdl.head = first;
 		//System.out.println(fdl.head.data);
 		//System.out.println("************************EXITING CLOSURE************************");
+		System.out.println("Returning closure: " + closureR);
 		return closureR;
 	}
 	
-	/*public static Relation diffR(Relation r1, Relation r2)
-	{
-		int arr1[], arr2[];
-		arr1 = r1.attr;
-		arr2 = r2.attr;
-		
-		int arrF[] = new int[26];
-		
-		for(int i = 0; i < arrF.length; i++)
-		{
-			if(arr1[i] == 1 && arr2[i] == 0)
-			{
-				arrF[i] = 1;
-			}
-		}
-		Relation r = new Relation(arrF);
-		return r;
-	}*/
-	
-	/*public static Relation unionR(Relation r1, Relation r2)
-	{
-		int arr1[], arr2[];
-		arr1 = r1.attr;
-		arr2 = r2.attr;
-		
-		int arrF[] = new int[26];
-		
-		for(int i = 0; i < arrF.length; i++)
-		{
-			if(arr1[i] == 1 || arr2[i] == 1)
-			{
-				arrF[i] = 1;
-			}
-		}
-		Relation r = new Relation(arrF);
-		return r;
-	}*/
-	
 	public static boolean bcnfViolation(Relation r, FD fd, FDList fdl)
 	{
-		Relation a = closure(fd, fdl);
+		Relation a = closure(fd, origList);
 		System.out.println("BCNF Check - Relation: " + r);
 		System.out.println("BCNF Check - Closure: " + a);
 		System.out.println("BCNF Check - Funcitonal Dependency: " + fd);
@@ -107,6 +74,22 @@ public class Driver {
 	
 	public static DB bcnf(Relation r, FDList fdl)
 	{
+		origList = fdl;
+		
+		
+		
+		FDList temp = new FDList();
+		temp = fdl;
+		System.out.println("***************************************TRAVERSING***************************************");
+		fdl.traverse();
+		System.out.println("***************************************REMOVING FD***************************************");
+		temp.remove(temp.getNext().data);
+		System.out.println("***************************************TRAVERSING***************************************");
+		fdl.traverse();
+		
+		
+		
+		
 		DB db = new DB();
 		Stack<Relation> s = new Stack<Relation>();
 		s.push(r);
@@ -117,11 +100,11 @@ public class Driver {
 			System.out.println("**************************ENTERING DECOMPOSITION**************************");
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
-			if(count == 6) break;
+			if(count == 12) break;
 			boolean violation = false;
 			fdl.reset();
-			FD fd;
-			FD fdv = null; //Needed because while loop will give next FD after break.
+			FD fd = new FD();
+			FD fdv = new FD(); //Needed because while loop will give next FD after break.
 			while((fd = fdl.getNext().data) != null && !violation)
 			{
 				System.out.println("Current functional dependency: " + fd);
@@ -147,16 +130,17 @@ public class Driver {
 				 * We are dealing with not ONE fd here, but rather the fd's that follow
 				 * and include the current violating fd...
 				 */
-				Relation union = fdv.lhs.union(fdv.rhs);
 				System.out.println("VIOLATING FUNCTIONAL DEPENDENCY: " + fdv);//May have to be the CLOSURE of the fdv...
-				s.push(union);
-				System.out.println("UNION: " + union);
+				Relation union = fdv.lhs.union(fdv.rhs);
+				System.out.println("PUSHING UNION: " + union);
 				Relation diff = a.diff(fdv.rhs);
+				System.out.println("PUSHING DIFFERENCE: " + diff); //Should be whatever is on the rhs that gets removed.
+				s.push(union);
 				s.push(diff);
-				System.out.println("DIFFERENCE: " + diff);
 			}
-			System.out.println("**************************ENTERING DECOMPOSITION**************************");
+			System.out.println("**************************EXITING DECOMPOSITION**************************");
 		}
+		db.traverse();
 		return db;
 	}
 	public static void main(String[] args) throws IOException{
