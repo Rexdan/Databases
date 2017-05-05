@@ -1,8 +1,22 @@
 import java.util.NoSuchElementException;
 
+class StackNode<T> {
+	T data;
+	StackNode<T> next;
+	
+	public StackNode(T data, StackNode<T> next) {
+		this.data = data;
+		this.next = next;
+	}
+	
+	public String toString() {
+		return data.toString();
+	}
+}
+
 public class Stack<T> {
 
-	Node<T> front;
+	StackNode<T> front;
 	int size;
 	
 	public Stack() {
@@ -11,7 +25,7 @@ public class Stack<T> {
 	}
 	
 	public void push(T item) {
-		front = new Node<T>(item);
+		front = new StackNode<T>(item, front);
 		size++;
 	}
 	

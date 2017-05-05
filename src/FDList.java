@@ -47,29 +47,49 @@ public class FDList
 	}
 	
 	public void remove(FD fd)
-	{	
-		Node<FD> ptr = head;
-        if(size<=0){
-            System.out.print("List is empty");
-        }else{
-            do {
-                if(ptr.next.data.equals(fd))
-                {
-                	Node<FD> temp = ptr.next;
-                	ptr.next = temp.next;
-                	reset();
-                	return;
-                }
-                ptr = ptr.next;
-            }
-            while(ptr!=head);
-        }
+	{
+		if(size == 0) return;
+		Node<FD> ptr;
+		ptr = head;
+		do
+		{
+			if(ptr.next.data.equals(fd))
+			{
+				Node<FD> temp = ptr;
+				/*Case for when both head and tail.*/
+				if(size == 1)
+				{
+					head = null;
+					tail = null;
+				}
+				/*Case for when head.*/
+				if(temp.next == head)
+				{
+					head = head.next;
+					tail.next = head;
+				}
+				/*Case for when tail.*/
+				if(temp.next == tail)
+				{
+					System.out.println("REMOVING TAIL");
+					tail = ptr;
+					tail.next = head;
+					System.out.println("HEAD: " + head);
+					System.out.println("TAIL: " + tail);
+					
+				}
+				/*General case.*/
+				ptr.next = ptr.next.next;
+				size--;
+			}
+			ptr = ptr.next;
+		}while(ptr != head);
 	}
 	
 	public void traverse(){
         Node<FD> temp = head;
         if(size<=0){
-            System.out.print("List is empty");
+            System.out.println("List is empty");
         }else{
             do {
                 System.out.println(temp.data);

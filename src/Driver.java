@@ -8,46 +8,31 @@ public class Driver {
 	
 	public static Relation closure(FD fd, FDList fdl)
 	{
-		//System.out.println("The first element in fdl; first check: " + fdl.head.data);
+		/*For reseting the fdl at the end of the function.*/
 		Node<FD> first = fdl.head;
 		FD firstFD = fd;
-		//System.out.println("************************ENTERING CLOSURE************************");
 		FD ptr1 = fd;
 		FD ptr2;
 		Relation closureR = new Relation();
-		
-		closureR = new Relation();
 		Relation r1 = ptr1.lhs;
 		Relation r2 = ptr1.rhs;
 		closureR.insert(r1);
 		closureR.insert(r2);
-		//System.out.println("Current FD: " + ptr1);
 		ptr2 = ptr1;
-		//System.out.println("Previous FD: " + ptr2);
 		ptr1 = fdl.getNext().data;
-		//System.out.println("Current closure: " + closureR);
 		
 		while(ptr1 != null)
 		{
-			//System.out.println("Current FD: " + ptr1);
-			//System.out.println("Previous FD: " + ptr2);
-			
-			/*Change to finding the intersect and then change contains to find subset.*/
+			/*Basically just checking if they share elements.*/
 			if(ptr2.rhs.intersect(ptr1.lhs) != null)
 			{
 				closureR.insert(ptr1.rhs);
 			}
-			//System.out.println("Current closure: " + closureR);
 			ptr2 = ptr1;
 			ptr1 = fdl.getNext().data;
-			
 			if(ptr1.equals(firstFD)) break;
-			
 		}
 		fdl.head = first;
-		//System.out.println(fdl.head.data);
-		//System.out.println("************************EXITING CLOSURE************************");
-		System.out.println("Returning closure: " + closureR);
 		return closureR;
 	}
 	
@@ -74,36 +59,32 @@ public class Driver {
 	
 	public static DB bcnf(Relation r, FDList fdl)
 	{
-		origList = fdl;
 		DB db = new DB();
 		Stack<Relation> s = new Stack<Relation>();
 		s.push(r);
-		int count = 0;
 		
 		while(!s.isEmpty())
 		{
 			System.out.println("**************************ENTERING DECOMPOSITION**************************");
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
-			if(count == 12) break;
 			boolean violation = false;
 			fdl.reset();
 			FD fd = new FD();
 			FD fdv = new FD(); //Needed because while loop will give next FD after break.
 			while((fd = fdl.getNext().data) != null && !violation)
 			{
-				System.out.println("Current functional dependency: " + fd);
-
 				if(bcnfViolation(a, fd, fdl))
 				{
 					violation = true;
 					fdv = fd;
 				}
-				count ++;
 				if(fd.equals(fdl.tail.data)) break;
 			}
 			if(!violation)
+			{
 				db.insert(a);
+			}
 			else
 			{
 				/*
@@ -117,11 +98,13 @@ public class Driver {
 				 */
 				System.out.println("VIOLATING FUNCTIONAL DEPENDENCY: " + fdv);//May have to be the CLOSURE of the fdv...
 				Relation union = fdv.lhs.union(fdv.rhs);
-				System.out.println("PUSHING UNION: " + union);
 				Relation diff = a.diff(fdv.rhs);
-				System.out.println("PUSHING DIFFERENCE: " + diff); //Should be whatever is on the rhs that gets removed.
+				System.out.println("PUSHING DIFFERENCE: " + diff);
+				System.out.println("PUSHING UNION: " + union); //Should be whatever is on the rhs that gets removed.
 				s.push(union);
 				s.push(diff);
+				fdl.reset();
+				fdl.getNext();
 				fdl.remove(fdv);/*Needed to remove the functional dependency from the list*/
 			}
 			System.out.println("**************************EXITING DECOMPOSITION**************************");
@@ -162,6 +145,7 @@ public class Driver {
 		}
 		
 		/* Getting the initial functional dependencies.*/
+		origList = new FDList();
 		while((line = br.readLine()) != null)
 		{
 			Relation lhs, rhs;
@@ -172,7 +156,7 @@ public class Driver {
 			rhs = new Relation(line.substring(rLen, line.length()));
 			FD temp = new FD(lhs,rhs);
 			fdl.insert(temp);
-			
+			origList.insert(temp);
 		}
 		
 		DB db = bcnf(totalAttr, fdl);
