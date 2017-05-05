@@ -73,6 +73,12 @@ public class Driver {
 			System.out.println("**************************ENTERING DECOMPOSITION**************************");
 			Relation a = s.pop();
 			System.out.println("Current relation: " + a);
+			/*Case for when we have no more FD's and need to add everything that we have so far.*/
+			if(fdl.size == 0)
+			{
+				db.insert(a);
+				continue;
+			}
 			boolean violation = false;
 			fdl.reset();
 			FD fd = new FD();
@@ -92,15 +98,6 @@ public class Driver {
 			}
 			else
 			{
-				/*
-				 * This isn't that kind of union and difference...
-				 * Should be something like this:
-				 * 		Push the attributes that come after the violating fd.
-				 * 		Then push the leftover fd's as attributes.
-				 * 
-				 * We are dealing with not ONE fd here, but rather the fd's that follow
-				 * and include the current violating fd...
-				 */
 				System.out.println("VIOLATING FUNCTIONAL DEPENDENCY: " + fdv);//May have to be the CLOSURE of the fdv...
 				Relation union = fdv.lhs.union(fdv.rhs);
 				Relation diff = a.diff(fdv.rhs);
@@ -118,7 +115,7 @@ public class Driver {
 	}
 	public static void main(String[] args) throws IOException{
 		
-		/*System.out.println("This driver program will run BCNF decomposition on a set of functional dependencies and a given relation.");
+		System.out.println("This driver program will run BCNF decomposition on a set of functional dependencies and a given relation.");
 		System.out.println("It will take a file name as its input in the following format:");
 		System.out.println("A B C D //This is the relation and the first line of the file.");
 		System.out.println("A -> B D //This is the functional dependency and will come after the relation.");
@@ -127,9 +124,9 @@ public class Driver {
 		
 		Scanner sc = new Scanner(System.in);
 		String fd = sc.nextLine();
-		sc.close();*/
+		sc.close();
 		
-		String fd = "test.txt";
+		//String fd = "test2.txt";
 		
 		BufferedReader br = null; FileReader fr = null;
 		

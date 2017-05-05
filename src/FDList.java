@@ -55,12 +55,15 @@ public class FDList
 		{
 			if(ptr.next.data.equals(fd))
 			{
+				System.out.println("FOUND IT");
 				Node<FD> temp = ptr;
 				/*Case for when both head and tail.*/
 				if(size == 1)
 				{
 					head = null;
 					tail = null;
+					size--;
+					return;
 				}
 				/*Case for when head.*/
 				if(temp.next == head)
@@ -71,12 +74,8 @@ public class FDList
 				/*Case for when tail.*/
 				if(temp.next == tail)
 				{
-					System.out.println("REMOVING TAIL");
 					tail = ptr;
 					tail.next = head;
-					System.out.println("HEAD: " + head);
-					System.out.println("TAIL: " + tail);
-					
 				}
 				/*General case.*/
 				ptr.next = ptr.next.next;

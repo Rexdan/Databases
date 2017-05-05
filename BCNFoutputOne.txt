@@ -1,0 +1,58 @@
+This driver program will run BCNF decomposition on a set of functional dependencies and a given relation.
+It will take a file name as its input in the following format:
+A B C D //This is the relation and the first line of the file.
+A -> B D //This is the functional dependency and will come after the relation.
+The file containing this information must be in the *ROOT* of the project folder.
+Please specify the file name: **************************ENTERING DECOMPOSITION**************************
+Current relation: A B C D E
+BCNF Check - Relation: A B C D E
+BCNF Check - Closure: A B C D E
+BCNF Check - Funcitonal Dependency: A B-> C
+No BCNF violation.
+BCNF Check - Relation: A B C D E
+BCNF Check - Closure: B C D E
+BCNF Check - Funcitonal Dependency: C-> D
+BCNF violation.
+VIOLATING FUNCTIONAL DEPENDENCY: C-> D
+PUSHING DIFFERENCE: A B C E
+PUSHING UNION: C D
+FOUND IT
+**************************EXITING DECOMPOSITION**************************
+**************************ENTERING DECOMPOSITION**************************
+Current relation: A B C E
+BCNF Check - Relation: A B C E
+BCNF Check - Closure: A B C D E
+BCNF Check - Funcitonal Dependency: A B-> C
+No BCNF violation.
+BCNF Check - Relation: A B C E
+BCNF Check - Closure: B D E
+BCNF Check - Funcitonal Dependency: D-> B E
+BCNF violation.
+VIOLATING FUNCTIONAL DEPENDENCY: D-> B E
+PUSHING DIFFERENCE: A C
+PUSHING UNION: B D E
+FOUND IT
+**************************EXITING DECOMPOSITION**************************
+**************************ENTERING DECOMPOSITION**************************
+Current relation: A C
+BCNF Check - Relation: A C
+BCNF Check - Closure: A B C D E
+BCNF Check - Funcitonal Dependency: A B-> C
+No BCNF violation.
+**************************EXITING DECOMPOSITION**************************
+**************************ENTERING DECOMPOSITION**************************
+Current relation: B D E
+BCNF Check - Relation: B D E
+BCNF Check - Closure: A B C D E
+BCNF Check - Funcitonal Dependency: A B-> C
+No BCNF violation.
+**************************EXITING DECOMPOSITION**************************
+**************************ENTERING DECOMPOSITION**************************
+Current relation: C D
+BCNF Check - Relation: C D
+BCNF Check - Closure: A B C D E
+BCNF Check - Funcitonal Dependency: A B-> C
+No BCNF violation.
+**************************EXITING DECOMPOSITION**************************
+Relations Before BCNF Decomposition: {A B C D E}
+Relations After BCNF Decomposition: {(A C), (B D E), (C D)}

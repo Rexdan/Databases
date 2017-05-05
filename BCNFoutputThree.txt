@@ -1,0 +1,35 @@
+This driver program will run BCNF decomposition on a set of functional dependencies and a given relation.
+It will take a file name as its input in the following format:
+A B C D //This is the relation and the first line of the file.
+A -> B D //This is the functional dependency and will come after the relation.
+The file containing this information must be in the *ROOT* of the project folder.
+Please specify the file name: **************************ENTERING DECOMPOSITION**************************
+Current relation: A B C D E
+BCNF Check - Relation: A B C D E
+BCNF Check - Closure: A B
+BCNF Check - Funcitonal Dependency: A-> B
+BCNF violation.
+VIOLATING FUNCTIONAL DEPENDENCY: A-> B
+PUSHING DIFFERENCE: A C D E
+PUSHING UNION: A B
+FOUND IT
+**************************EXITING DECOMPOSITION**************************
+**************************ENTERING DECOMPOSITION**************************
+Current relation: A C D E
+BCNF Check - Relation: A C D E
+BCNF Check - Closure: C D
+BCNF Check - Funcitonal Dependency: C-> D
+BCNF violation.
+VIOLATING FUNCTIONAL DEPENDENCY: C-> D
+PUSHING DIFFERENCE: A C E
+PUSHING UNION: C D
+FOUND IT
+**************************EXITING DECOMPOSITION**************************
+**************************ENTERING DECOMPOSITION**************************
+Current relation: A C E
+**************************ENTERING DECOMPOSITION**************************
+Current relation: C D
+**************************ENTERING DECOMPOSITION**************************
+Current relation: A B
+Relations Before BCNF Decomposition: {A B C D E}
+Relations After BCNF Decomposition: {(A C E), (C D), (A B)}
