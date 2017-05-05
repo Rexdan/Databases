@@ -23,11 +23,16 @@ public class Driver {
 		
 		while(ptr1 != null)
 		{
-			/*Basically just checking if they share elements.*/
-			if(ptr2.rhs.intersect(ptr1.lhs) != null)
+			/*Basically just checking if they share elements. ALL of the lhs needs to appear in in the rhs.*/
+			if(ptr1.lhs.subset(ptr2.rhs))
 			{
 				closureR.insert(ptr1.rhs);
 			}
+			
+			/*if(ptr2.rhs.intersect(ptr1.lhs) != null)
+			{
+				closureR.insert(ptr1.rhs);
+			}*/
 			ptr2 = ptr1;
 			ptr1 = fdl.getNext().data;
 			if(ptr1.equals(firstFD)) break;
@@ -109,7 +114,6 @@ public class Driver {
 			}
 			System.out.println("**************************EXITING DECOMPOSITION**************************");
 		}
-		db.traverse();
 		return db;
 	}
 	public static void main(String[] args) throws IOException{
@@ -160,7 +164,9 @@ public class Driver {
 		}
 		
 		DB db = bcnf(totalAttr, fdl);
-		
+		System.out.println("Relations Before BCNF Decomposition: " + "{" + totalAttr + "}");
+		System.out.print("Relations After BCNF Decomposition: ");
+		db.traverse();
 		if(br != null) br.close();
 		if(fr != null) fr.close();
 	}

@@ -101,6 +101,19 @@ public class Relation
 		//System.out.println("INTERSECT: " + toReturn);
 		return toReturn;
 	}
+	/*Checks to see if all of the elements in *this* relation are in the input relation.*/
+	public boolean subset(Relation r)
+	{
+		int [] r1 = this.attr;
+		int [] r2 = r.attr;
+		
+		for(int i = 0; i < r1.length; i++)
+		{
+			if(r1[i] == 1 && r2[i] == 0) return false;
+		}
+		
+		return true;
+	}
 	
 	public boolean contains(Object o)
 	{

@@ -77,15 +77,23 @@ public class DB
 	}
 	
 	public void traverse(){
+		String toPrint = "";
         Node<Relation> temp = head;
         if(size<=0){
             System.out.print("List is empty");
         }else{
             do {
-                System.out.println(temp.data);
+            	if(temp == head) toPrint += (("{(" + temp.data + "), "));
+            	else
+            	{
+            		toPrint += ("(" + temp.data + "), ");
+            	}
                 temp = temp.next;
             }
             while(temp!=head);
         }
+        toPrint = toPrint.substring(0, toPrint.length()-2);
+        toPrint += "}";
+        System.out.println(toPrint);
     }
 }
