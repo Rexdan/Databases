@@ -75,21 +75,6 @@ public class Driver {
 	public static DB bcnf(Relation r, FDList fdl)
 	{
 		origList = fdl;
-		
-		
-		
-		FDList temp = new FDList();
-		temp = fdl;
-		System.out.println("***************************************TRAVERSING***************************************");
-		fdl.traverse();
-		System.out.println("***************************************REMOVING FD***************************************");
-		temp.remove(temp.getNext().data);
-		System.out.println("***************************************TRAVERSING***************************************");
-		fdl.traverse();
-		
-		
-		
-		
 		DB db = new DB();
 		Stack<Relation> s = new Stack<Relation>();
 		s.push(r);
@@ -137,6 +122,7 @@ public class Driver {
 				System.out.println("PUSHING DIFFERENCE: " + diff); //Should be whatever is on the rhs that gets removed.
 				s.push(union);
 				s.push(diff);
+				fdl.remove(fdv);/*Needed to remove the functional dependency from the list*/
 			}
 			System.out.println("**************************EXITING DECOMPOSITION**************************");
 		}

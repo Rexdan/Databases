@@ -48,9 +48,7 @@ public class FDList
 	
 	public void remove(FD fd)
 	{	
-		System.out.println("Want to remove: " + fd);
 		Node<FD> ptr = head;
-		System.out.println(head.data);
         if(size<=0){
             System.out.print("List is empty");
         }else{
@@ -59,22 +57,13 @@ public class FDList
                 {
                 	Node<FD> temp = ptr.next;
                 	ptr.next = temp.next;
-                	System.out.println("FOUND FD: " + temp.data);
-                	System.out.println(ptr.next.data);
-                	System.out.println(ptr.next.next.data);
-                	System.out.println(ptr.next.next.next.data);
-                	System.out.println(tail.next.data);
-                	System.out.println(head.data);
-                	//tail.next =n;
-                   // tail=n;
-                   // tail.next = head;
-                	//return;
+                	reset();
+                	return;
                 }
                 ptr = ptr.next;
             }
             while(ptr!=head);
         }
-		
 	}
 	
 	public void traverse(){
