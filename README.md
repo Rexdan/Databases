@@ -12,3 +12,4 @@ The user simply needs to create a text document (.txt) and add relations like so
 This text document must be in the root directory of the program.
 The output of the program will be shown through terminal with some progress messages.
 End result will be a set of relations that are in BCNF form.
+
